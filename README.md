@@ -5,10 +5,10 @@ Collection of scripts to perfrom the Web-Scraping of Jobs from Linkedin. It auto
 ## Installation:
 
 Run the following command lines for the installation
-
-'''
+```
 git clone git@github.com:Benetti-Hub/Web-Scraping-Linkedin.git
-'''
+```
+
 'cd Web-Scraping-Linkedin'
 'pip install -r requirements.txt'
 
