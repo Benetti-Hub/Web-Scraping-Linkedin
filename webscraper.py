@@ -1,10 +1,9 @@
 '''Linkedin Web Scraping Class'''
-import numpy as np
-import pandas as pd
 import platform
 import time
 import re
 
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -100,24 +99,31 @@ class WebScraper():
             'id' : job.id,
             'title' : job.find_element_by_css_selector('h3').get_attribute('innerText'),
             'company_name' : job.find_element_by_css_selector('h4').get_attribute('innerText'),
-            'location' : job.find_element_by_css_selector('[class="job-search'+
-                                '-card__location"]').get_attribute('innerText'),
+            'location' : job.find_element_by_css_selector('[class="job-search-card__location"]').get_attribute('innerText'),
             'date_posted' : job.find_element_by_css_selector('div>div>time').get_attribute('datetime'),
             'link' : job.find_element_by_css_selector('a').get_attribute('href'),
-            'description' : job.find_element_by_xpath('/html/body/div[1]/div/section'+
-                            '/div[2]/section[2]').get_attribute('innerText')
+            'description' : job.find_element_by_xpath('/html/body/div[1]/div/section/div[2]/section[2]/div/section/div').get_attribute('innerText')
         }
+
+        e_infos = self.wd.find_element_by_xpath('/html/body/div[1]/div/'
+                          'section/div[2]/section[2]/ul').text.splitlines()
+
+        for i in range(0, len(e_infos), 2):
+            job_info[e_infos[i]] = e_infos[i+1]
 
         return job_info
 
 
     def scrape_linkedin(self, url):
-
-        if self.verbose:
-            print("Connecting to Linkedin")
-
+        '''
+        Core function of the WebScraper Class.
+        It performs the various scraping routines
+        and collect the results in the
+        '''
         self.get_wd()
         self.wd.get(url)
+        if self.verbose:
+            print(f"Connecting to Linkedin!")
 
         time.sleep(SLEEP_TIME)
         self.remove_cookies()
@@ -129,19 +135,10 @@ class WebScraper():
         job_info = []
         for job in jobs:
             job.click()
-            job_info.append(self.collect_infos(job))
             time.sleep(SLEEP_TIME)
+            job_info.append(self.collect_infos(job))
 
-        df = pd.DataFrame(job_info)
-
-
-
-
-
-
-
-
-
-
-
-
+        job_df = pd.DataFrame(job_info)
+        full_location = job_df['location'].value_counts().index[0]
+        save_location = "".join(full_location.split())
+        job_df.to_csv(f'data/{save_location}.csv')
