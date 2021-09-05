@@ -1,6 +1,6 @@
 # Job-Scraping-Linkedin
 
-Collection of scripts to perfrom the Web-Scraping of Jobs from Linkedin. It automatically analyze all the links in the link.txt file (in parallel) and collect the relevant informations in the data folder. One can then use NLP to extract relevant information from the collected data (for example, in Zurich one might want to avoid jobs listing in German and focus only on English ones).
+Collection of scripts to perfrom the Web-Scraping of Jobs from Linkedin. It automatically analyze all the links in the links.txt file (in parallel) and collect the relevant informations in the data folder. One can then use NLP to extract relevant information from the collected data (for example, in Zurich one might want to avoid jobs listing in German and focus only on English ones).
 
 ## Installation:
 
