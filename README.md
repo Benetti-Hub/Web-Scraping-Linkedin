@@ -16,7 +16,7 @@ Copy the link from a job search from Linkedin, make sure that the correct filter
 Paste the link in the links.txt file, and then run:
 
 ```
-python scraper.py
+python3 scraper.py
 ```
 
 
