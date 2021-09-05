@@ -22,7 +22,8 @@ def get_urls():
     with fileinput.input(files=('links.txt')) as f:
         urls = []
         for line in f:
-            urls.append(line)
+            if len(line)>0:
+                urls.append(line)
 
     return urls
 

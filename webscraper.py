@@ -97,14 +97,21 @@ class WebScraper():
         '''
         job_info = {
             'id' : job.id,
-            'title' : job.find_element_by_css_selector('h3').get_attribute('innerText'),
-            'company_name' : job.find_element_by_css_selector('h4').get_attribute('innerText'),
-            'location' : job.find_element_by_css_selector('[class="job-search-card__location"]').get_attribute('innerText'),
-            'date_posted' : job.find_element_by_css_selector('div>div>time').get_attribute('datetime'),
-            'link' : job.find_element_by_css_selector('a').get_attribute('href'),
-            'description' : job.find_element_by_xpath('/html/body/div[1]/div/section/div[2]/section[2]/div/section/div').get_attribute('innerText')
-        }
 
+            'title' : job.find_element_by_css_selector('h3').get_attribute('innerText'),
+
+            'company_name' : job.find_element_by_css_selector('h4').get_attribute('innerText'),
+
+            'location' : job.find_element_by_css_selector('[class="job-search-'+
+                         'card__location"]').get_attribute('innerText'),
+
+            'date_posted' : job.find_element_by_css_selector('div>div>time').get_attribute('datetime'),
+
+            'link' : job.find_element_by_css_selector('a').get_attribute('href'),
+
+            'description' : job.find_element_by_xpath('/html/body/div[1]/div/section/div[2]/'+
+                            'section[2]/div/section/div').get_attribute('innerText')
+        }
         e_infos = self.wd.find_element_by_xpath('/html/body/div[1]/div/'
                           'section/div[2]/section[2]/ul').text.splitlines()
 
@@ -139,6 +146,6 @@ class WebScraper():
             job_info.append(self.collect_infos(job))
 
         job_df = pd.DataFrame(job_info)
-        full_location = job_df['location'].value_counts().index[0]
-        save_location = "".join(full_location.split())
-        job_df.to_csv(f'data/{save_location}.csv')
+        location = job_df['location'].value_counts().index[0].split()[0][:-1]
+        job_type = ''.join(job_df['title'].value_counts().index[0].split())
+        job_df.to_csv(f'data/{location}_{job_type}.csv')
