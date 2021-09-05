@@ -19,7 +19,9 @@ pip install -r requirements.txt
 Copy the link from a job search from Linkedin, make sure that the correct filters are selected before copying it!
 Paste the link in the links.txt file, and then run:
 
-'python scraper.py'
+```
+python scraper.py
+```
 
 
 
