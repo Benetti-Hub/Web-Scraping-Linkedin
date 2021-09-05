@@ -8,6 +8,9 @@ Run the following command lines for the installation
 ```
 git clone git@github.com:Benetti-Hub/Web-Scraping-Linkedin.git
 cd Web-Scraping-Linkedin
+```
+Install the dependencies with:
+```
 pip install -r requirements.txt
 ```
 ## Usage:
