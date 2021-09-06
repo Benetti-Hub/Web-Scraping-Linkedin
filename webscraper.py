@@ -7,7 +7,7 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-SLEEP_TIME = 2
+SLEEP_TIME = 0.5
 
 class WebScraper():
     '''
@@ -68,7 +68,9 @@ class WebScraper():
         s = self.wd.find_element_by_css_selector('h1>span').get_attribute('innerText')
         jobs = int(re.sub(r'[^\w]', '', s))
 
-        for _ in range(int(jobs/25)):
+        print(f"Scanning for {jobs} jobs!")
+        job_li = []
+        while len(job_li) < jobs-5:
             self.wd.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             time.sleep(SLEEP_TIME)
             try:
@@ -76,11 +78,12 @@ class WebScraper():
             except:
                 pass
 
+            avail_jobs = self.wd.find_element_by_class_name('jobs-search__results-list')
+            job_li = avail_jobs.find_elements_by_tag_name('li')
+
         #Returns at top of the page
         self.wd.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-
-        job_lists = self.wd.find_element_by_class_name('jobs-search__results-list')
-        return job_lists.find_elements_by_tag_name('li')
+        return job_li
 
     def collect_infos(self, job):
         '''
@@ -117,6 +120,13 @@ class WebScraper():
 
         for i in range(0, len(e_infos), 2):
             job_info[e_infos[i]] = e_infos[i+1]
+
+        if 'description' not in job_info.keys():
+            print('did not load in time!')
+            time.sleep(SLEEP_TIME)
+            job_info = self.collect_infos(job)
+
+        print(job_info)
 
         return job_info
 
